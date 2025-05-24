@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Coleta</title>
+  <link rel="stylesheet" href="./tela-2.css" />
+</head>
+
+<body>
+  <main class="container" aria-labelledby="main-title">
+    <h1 class="title" id="main-title">Nova Coleta</h1>
+
+    <section class="section" aria-labelledby="section-disposal">
+      <h2 id="section-disposal">Solicitação Personalizada</h2>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; margin: 12px 0;">
+        <label for="input-endereco">Endereço</label>
+        <input type="text" id="input-endereco" placeholder="Digite o endereço" class="input"
+          style="padding: 8px; border-radius: 8px; border: 1px solid #6D6D6D;" />
+
+        <label for="input-materiais">Materiais para Coleta</label>
+        <input type="text" id="input-materiais" placeholder="Ex: Papel, Vidro" class="input"
+          style="padding: 8px; border-radius: 8px; border: 1px solid #6D6D6D;" />
+      </div>
+
+      <article class="section-content">
+        <div class="Material" aria-label="Lista de materiais" style="flex: 1;">
+          <h3 style="color: #1B5E20;">Resumo da Solicitação</h3>
+          <p><strong>Endereço:</strong> <span id="endereco">-</span></p>
+          <p><strong>Materiais:</strong> <span id="materiais">-</span></p>
+        </div>
+      </article>
+
+      <article>
+        <h3 style="color: #1B5E20; margin-bottom: 8px;">Rota Otimizada</h3>
+        <div class="map" style="padding: 0;">
+          <div id="map"></div>
+        </div>
+      </article>
+    </section>
+
+    <button class="button" aria-pressed="false">Iniciar Coleta</button>
+  </main>
+<!-- Google Maps API com Places e Callback -->
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDUjEvSad6K6uZmxK-sBJU6W8lbczxJ1t8&libraries=places&callback=initMap"async defer></script>
+
+<script>
+  let map;
+  let directionsService;
+  let directionsRenderer;
+  let autocomplete;
+
+  function initMap() {
+    // Mapa
+    map = new google.maps.Map(document.getElementById("map"), {
+      zoom: 14,
+      center: { lat: -23.55052, lng: -46.633308 } // Centro inicial (São Paulo)
+    });
+
+    // Direções
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
+    // Autocomplete
+    const enderecoInput = document.getElementById("input-endereco");
+    autocomplete = new google.maps.places.Autocomplete(enderecoInput, {
+      types: ["geocode"],
+      componentRestrictions: { country: "br" } // Restringe ao Brasil
+    });
+
+    autocomplete.addListener("place_changed", function () {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        calcularRota(place.formatted_address);
+        atualizarVisualizacao();
+      }
+    });
+  }
+
+  const enderecoInput = document.getElementById("input-endereco");
+  const materiaisInput = document.getElementById("input-materiais");
+  const enderecoDisplay = document.getElementById("endereco");
+  const materiaisDisplay = document.getElementById("materiais");
+  const botao = document.querySelector(".button");
+
+  function atualizarVisualizacao() {
+    const endereco = enderecoInput.value.trim() || "Endereço não informado";
+    const materiais = materiaisInput.value.trim() || "Nenhum material selecionado";
+
+    enderecoDisplay.textContent = endereco;
+    materiaisDisplay.textContent = materiais;
+  }
+
+  function calcularRota(origemEndereco) {
+    const destinoColeta = "Rua do Centro de Coleta, 1000, São Paulo";
+
+    const request = {
+      origin: origemEndereco,
+      destination: destinoColeta,
+      travelMode: 'DRIVING'
+    };
+
+    directionsService.route(request, function (result, status) {
+      if (status === 'OK') {
+        directionsRenderer.setDirections(result);
+      } else {
+        alert("Não foi possível calcular a rota. Verifique o endereço.");
+      }
+    });
+  }
+
+  enderecoInput.addEventListener('change', atualizarVisualizacao);
+  materiaisInput.addEventListener('input', atualizarVisualizacao);
+
+  botao.addEventListener('click', () => {
+    const endereco = enderecoInput.value.trim();
+    const materiais = materiaisInput.value.trim();
+
+    if (!endereco || !materiais) {
+      alert("Preencha o endereço e os materiais antes de iniciar a coleta.");
+      return;
+    }
+
+    const coleta = {
+      endereco,
+      materiais,
+      dataHora: new Date().toLocaleString()
+    };
+
+    localStorage.setItem('ultimaColeta', JSON.stringify(coleta));
+
+    alert("Coleta iniciada com sucesso!\nEndereço: " + endereco + "\nMateriais: " + materiais);
+  });
+</script>
+
+</body>
+
+</html>

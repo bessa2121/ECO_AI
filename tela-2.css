@@ -1,0 +1,130 @@
+@font-face {
+    font-family: 'Garet';
+    src: url('fonts/Garet-Book.otf') format('opentype');
+}
+
+@font-face {
+    font-family: 'Montserrat';
+    src: url('fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+body {
+    background-color: #c4c4c4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+#map {
+    height: 300px; /* Ajustado para corresponder à altura do quadrado verde */
+    width: 100%; /* Mantendo a mesma largura do quadrado verde */
+    border-radius: 8px; /* Bordas arredondadas para manter o estilo */
+    margin: 10px auto; /* Centraliza o mapa corretamente */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.4); /* Adicionando sombra leve */
+}
+
+
+.container {
+    background-color: #FFFFFF;
+    width: 90%;
+    max-width: 420px;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.788);
+}
+
+.title {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #1B5E20;
+    /* Verde escuro para sustentabilidade */
+}
+
+.section {
+    border: 1px solid #6D6D6D;
+    /* Cinza neutro para sofisticação */
+    background-color: #F1F8E9;
+    /* Verde claro para energia positiva */
+    padding: 12px;
+    margin-bottom: 16px;
+    border-radius: 8px;
+}
+
+.section-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.volume-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    background-color: #003366;
+    /* Azul profundo para credibilidade */
+    height: 100px;
+    width: 35%;
+    color: white;
+}
+
+.volume-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.description {
+    font-size: 0.875rem;
+    color: #DCE1E5;
+    /* Cinza suave para equilíbrio */
+    margin-top: 0;
+    text-align: center;
+}
+
+.button {
+    background-color: #1B5E20;
+    /* Verde escuro para confiabilidade */
+    color: white;
+    padding: 12px;
+    width: 100%;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 16px;
+}
+
+p {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.button:hover {
+    background-color: #004D40;
+    /* Tom mais escuro para profundidade */
+}
+
+@media (max-width: 480px) {
+    .section-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .map {
+        width: 100%;
+    }
+
+    .volume-container {
+        width: 100%;
+        align-items: center;
+        text-align: center;
+    }
+}
